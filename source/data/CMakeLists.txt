@@ -44,7 +44,7 @@ endif()
 
 set(copy_dependent_libraries "")
 
-if(WIN32)
+if(WIN32 AND NOT CMAKE_CROSSCOMPILING)
   # FIXME: How to set PATH environment variable in custom command?
   foreach(executable icupkg pkgdata)
     foreach(dependency icutu icui18n icuuc icustubdata)
