@@ -300,6 +300,8 @@ void Win32DateFormat::setTimeZone(const TimeZone& zone)
 
 static const DWORD dfFlags[] = {DATE_LONGDATE, DATE_LONGDATE, DATE_SHORTDATE, DATE_SHORTDATE};
 
+#if U_PLATFORM_HAS_WINUWP_API == 0
+
 void Win32DateFormat::formatDate(const SYSTEMTIME *st, UnicodeString &appendTo) const
 {
     int result;
@@ -324,7 +326,45 @@ void Win32DateFormat::formatDate(const SYSTEMTIME *st, UnicodeString &appendTo) 
     }
 }
 
+#else
+
+// From ICU 61.1
+void Win32DateFormat::formatDate(const SYSTEMTIME *st, UnicodeString &appendTo) const
+{
+    int result=0;
+    wchar_t stackBuffer[STACK_BUFFER_SIZE];
+    wchar_t *buffer = stackBuffer;
+    const wchar_t *localeName = nullptr;
+
+    if (fWindowsLocaleName != nullptr)
+    {
+        localeName = fWindowsLocaleName->getTerminatedBuffer();
+    }
+
+    result = GetDateFormatEx(localeName, dfFlags[fDateStyle - kDateOffset], st, NULL, buffer, STACK_BUFFER_SIZE, NULL);
+
+    if (result == 0) {
+        if (GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
+            int newLength = GetDateFormatEx(localeName, dfFlags[fDateStyle - kDateOffset], st, NULL, NULL, 0, NULL);
+
+            buffer = NEW_ARRAY(wchar_t, newLength);
+
+            GetDateFormatEx(localeName, dfFlags[fDateStyle - kDateOffset], st, NULL, buffer, newLength, NULL);
+        }
+    }
+
+    appendTo.append((const UChar *)buffer, (int32_t) wcslen(buffer));
+
+    if (buffer != stackBuffer) {
+        DELETE_ARRAY(buffer);
+    }
+}
+
+#endif
+
 static const DWORD tfFlags[] = {0, 0, 0, TIME_NOSECONDS};
+
+#if U_PLATFORM_HAS_WINUWP_API == 0
 
 void Win32DateFormat::formatTime(const SYSTEMTIME *st, UnicodeString &appendTo) const
 {
@@ -349,6 +389,42 @@ void Win32DateFormat::formatTime(const SYSTEMTIME *st, UnicodeString &appendTo) 
         DELETE_ARRAY(buffer);
     }
 }
+
+#else
+
+// From ICU 61.1
+void Win32DateFormat::formatTime(const SYSTEMTIME *st, UnicodeString &appendTo) const
+{
+    int result;
+    wchar_t stackBuffer[STACK_BUFFER_SIZE];
+    wchar_t *buffer = stackBuffer;
+    const wchar_t *localeName = nullptr;
+
+    if (fWindowsLocaleName != nullptr)
+    {
+        localeName = fWindowsLocaleName->getTerminatedBuffer();
+    }
+
+    result = GetTimeFormatEx(localeName, tfFlags[fTimeStyle], st, NULL, buffer, STACK_BUFFER_SIZE);
+
+    if (result == 0) {
+        if (GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
+            int newLength = GetTimeFormatEx(localeName, tfFlags[fTimeStyle], st, NULL, NULL, 0);
+
+            buffer = NEW_ARRAY(wchar_t, newLength);
+
+            GetTimeFormatEx(localeName, tfFlags[fTimeStyle], st, NULL, buffer, newLength);
+        }
+    }
+
+    appendTo.append((const UChar *)buffer, (int32_t) wcslen(buffer));
+
+    if (buffer != stackBuffer) {
+        DELETE_ARRAY(buffer);
+    }
+}
+
+#endif
 
 UnicodeString Win32DateFormat::setTimeZoneInfo(TIME_ZONE_INFORMATION *tzi, const TimeZone &zone) const
 {
