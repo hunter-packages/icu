@@ -5,8 +5,8 @@ cmake_minimum_required(VERSION 3.0)
 
 include("cmake/HunterGate.cmake")
 HunterGate(
-    URL "https://github.com/ruslo/hunter/archive/1efaca0d8c9a6fc8253008d0b1b4dda03d902fda.zip"
-    SHA1 "f66e277020b7c6e144d7e6439748af42ac8a54e3"
+    URL "https://github.com/ruslo/hunter/archive/v0.20.47.tar.gz"
+    SHA1 "53458b5b7ac76bb8e6af778d6c44155385258af8"
 )
 
 project(ICU VERSION 55.1 LANGUAGES C CXX ASM)
@@ -17,11 +17,19 @@ else()
   set(default ON)
 endif()
 
+if(MSVC)
+  add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+  add_definitions(-D_CRT_SECURE_NO_DEPRECATE)
+  add_definitions(-DU_ATTRIBUTE_DEPRECATED=)
+endif()
+
 option(ICU_BUILD_TOOLS "Build ICU tools" ${default})
 
 option(ICU_BUILD_IO "Build IO library" OFF)
 
 option(ICU_DATA_ARCHIVE_MODE "Output a single icudt*.dat file" OFF)
+
+string(COMPARE EQUAL "${CMAKE_SYSTEM_NAME}" "WindowsStore" ICU_WINDOWS_STORE)
 
 include(CheckIncludeFile)
 check_include_file(elf.h U_HAVE_ELF_H)
