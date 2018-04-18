@@ -104,7 +104,9 @@ typedef size_t uintptr_t;
 #ifdef U_TZSET
     /* Use the predefined value. */
 #elif U_PLATFORM_USES_ONLY_WIN32_API
+# if U_PLATFORM_HAS_WINUWP_API == 0
 #   define U_TZSET _tzset
+# endif
 #elif U_PLATFORM == U_PF_OS400
    /* not defined */
 #else
