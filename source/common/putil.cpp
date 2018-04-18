@@ -82,6 +82,20 @@
 #   define NOMCX
 #   include <windows.h>
 #   include "wintz.h"
+
+# if U_PLATFORM_HAS_WINUWP_API == 1
+typedef PVOID LPMSG; // TODO: figure out how to get rid of this typedef
+#  include "unicode/uloc.h"
+#  include <Windows.Globalization.h>
+#  include <windows.system.userprofile.h>
+#  include <wrl/wrappers/corewrappers.h>
+#  include <wrl/client.h>
+
+using namespace ABI::Windows::Foundation;
+using namespace Microsoft::WRL;
+using namespace Microsoft::WRL::Wrappers;
+# endif
+
 #elif U_PLATFORM == U_PF_OS400
 #   include <float.h>
 #   include <qusec.h>       /* error code structure */
@@ -1121,6 +1135,7 @@ static CharString *gTimeZoneFilesDirectory = NULL;
 
 #if U_POSIX_LOCALE || U_PLATFORM_USES_ONLY_WIN32_API
  static char *gCorrectedPOSIXLocale = NULL; /* Heap allocated */
+ static bool gCorrectedPOSIXLocaleHeapAllocated = false;
 #endif
 
 static UBool U_CALLCONV putil_cleanup(void)
@@ -1250,7 +1265,11 @@ static void U_CALLCONV dataDirectoryInitFn() {
     */
 #   if !defined(ICU_NO_USER_DATA_OVERRIDE) && !UCONFIG_NO_FILE_IO
     /* First try to get the environment variable */
+    #if defined(U_PLATFORM_HAS_WINUWP_API) && U_PLATFORM_HAS_WINUWP_API == 1
+    // getenv not available
+    #else
     path=getenv("ICU_DATA");
+    #endif
 #   endif
 
     /* ICU_DATA_DIR may be set as a compile option.
@@ -1319,7 +1338,12 @@ static void U_CALLCONV TimeZoneDataDirInitFn(UErrorCode &status) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
+#if defined(U_PLATFORM_HAS_WINUWP_API) && U_PLATFORM_HAS_WINUWP_API == 1
+    const char *dir = "";
+#else
     const char *dir = getenv("ICU_TIMEZONE_FILES_DIR");
+#endif
+
 #if defined(U_TIMEZONE_FILES_DIR)
     if (dir == NULL) {
         dir = TO_STRING(U_TIMEZONE_FILES_DIR);
@@ -1566,6 +1590,110 @@ The leftmost codepage (.xxx) wins.
         return gCorrectedPOSIXLocale;
     }
 
+#if defined(U_PLATFORM_HAS_WINUWP_API) && U_PLATFORM_HAS_WINUWP_API == 1
+
+    // Implementation from ICU 61.1
+
+    // No cached value, need to determine the current value
+    static WCHAR windowsLocale[LOCALE_NAME_MAX_LENGTH];
+    // In a UWP app, we want the top language that the application and user agreed upon
+    ComPtr<ABI::Windows::Foundation::Collections::IVectorView<HSTRING>> languageList;
+
+    ComPtr<ABI::Windows::Globalization::IApplicationLanguagesStatics> applicationLanguagesStatics;
+    HRESULT hr = GetActivationFactory(
+        HStringReference(RuntimeClass_Windows_Globalization_ApplicationLanguages).Get(),
+        &applicationLanguagesStatics);
+    if (SUCCEEDED(hr))
+    {
+        hr = applicationLanguagesStatics->get_Languages(&languageList);
+    }
+
+    if (FAILED(hr))
+    {
+        // If there is no application context, then use the top language from the user language profile
+        ComPtr<ABI::Windows::System::UserProfile::IGlobalizationPreferencesStatics> globalizationPreferencesStatics;
+        hr = GetActivationFactory(
+            HStringReference(RuntimeClass_Windows_System_UserProfile_GlobalizationPreferences).Get(),
+            &globalizationPreferencesStatics);
+        if (SUCCEEDED(hr))
+        {
+            hr = globalizationPreferencesStatics->get_Languages(&languageList);
+        }
+    }
+
+    // We have a list of languages, ICU knows one, so use the top one for our locale
+    HString topLanguage;
+    if (SUCCEEDED(hr))
+    {
+        hr = languageList->GetAt(0, topLanguage.GetAddressOf());
+    }
+
+    if (FAILED(hr))
+    {
+        // Unexpected, use en-US by default
+        if (gCorrectedPOSIXLocale == NULL) {
+            gCorrectedPOSIXLocale = "en_US";
+        }
+
+        return gCorrectedPOSIXLocale;
+    }
+
+    // ResolveLocaleName will get a likely subtags form consistent with Windows behavior.
+    int length = ResolveLocaleName(topLanguage.GetRawBuffer(NULL), windowsLocale, UPRV_LENGTHOF(windowsLocale));
+
+    // Now we should have a Windows locale name that needs converted to the POSIX style,
+    if (length > 0)
+    {
+        // First we need to go from UTF-16 to char (and also convert from _ to - while we're at it.)
+        char modifiedWindowsLocale[LOCALE_NAME_MAX_LENGTH];
+
+        int32_t i;
+        for (i = 0; i < UPRV_LENGTHOF(modifiedWindowsLocale); i++)
+        {
+            if (windowsLocale[i] == '_')
+            {
+                modifiedWindowsLocale[i] = '-';
+            }
+            else
+            {
+                modifiedWindowsLocale[i] = static_cast<char>(windowsLocale[i]);
+            }
+
+            if (modifiedWindowsLocale[i] == '\0')
+            {
+                break;
+            }
+        }
+
+        if (i >= UPRV_LENGTHOF(modifiedWindowsLocale))
+        {
+            // Ran out of room, can't really happen, maybe we'll be lucky about a matching
+            // locale when tags are dropped
+            modifiedWindowsLocale[UPRV_LENGTHOF(modifiedWindowsLocale) - 1] = '\0';
+        }
+
+        // Now normalize the resulting name
+        correctedPOSIXLocale = static_cast<char *>(uprv_malloc(POSIX_LOCALE_CAPACITY + 1));
+        /* TODO: Should we just exit on memory allocation failure? */
+        if (correctedPOSIXLocale)
+        {
+            int32_t posixLen = uloc_canonicalize(modifiedWindowsLocale, correctedPOSIXLocale, POSIX_LOCALE_CAPACITY, &status);
+            if (U_SUCCESS(status))
+            {
+                *(correctedPOSIXLocale + posixLen) = 0;
+                gCorrectedPOSIXLocale = correctedPOSIXLocale;
+                gCorrectedPOSIXLocaleHeapAllocated = true;
+                ucln_common_registerCleanup(UCLN_COMMON_PUTIL, putil_cleanup);
+            }
+            else
+            {
+                uprv_free(correctedPOSIXLocale);
+            }
+        }
+    }
+
+#else
+
     LCID id = GetThreadLocale();
     correctedPOSIXLocale = static_cast<char *>(uprv_malloc(POSIX_LOCALE_CAPACITY + 1));
     if (correctedPOSIXLocale) {
@@ -1578,6 +1706,8 @@ The leftmost codepage (.xxx) wins.
             uprv_free(correctedPOSIXLocale);
         }
     }
+
+#endif
 
     if (gCorrectedPOSIXLocale == NULL) {
         return "en_US";
