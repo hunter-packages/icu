@@ -125,6 +125,8 @@ private:
     int32_t fLCID;
     UnicodeString fZoneID;
     TIME_ZONE_INFORMATION *fTZI;
+
+    UnicodeString* fWindowsLocaleName; // Stores the equivalent Windows locale name.
 };
 
 inline UnicodeString &Win32DateFormat::format(UDate date, UnicodeString& appendTo) const {
