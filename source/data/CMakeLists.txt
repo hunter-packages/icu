@@ -31,6 +31,11 @@ else()
 endif()
 
 if(CMAKE_CROSSCOMPILING)
+  if(ICU_WINDOWS_STORE)
+    # Use same 32/64 bit Visual Studio generator
+    set(HUNTER_EXPERIMENTAL_HOST_GENERATOR "${CMAKE_GENERATOR}")
+  endif()
+
   # When cross-compiling pkgdata/icupkg tools build with host toolchain
   include(hunter_experimental_add_host_project)
   hunter_experimental_add_host_project(cmake/host)
