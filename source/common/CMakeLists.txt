@@ -1,5 +1,11 @@
+set(sources)
+if(NOT ICU_WINDOWS_STORE)
+  list(APPEND sources icuplug.cpp wintz.c)
+endif()
+
 add_library(
     icuuc
+    ${sources}
     appendable.cpp
     bmpset.cpp
     bmpset.h
@@ -29,7 +35,6 @@ add_library(
     filterednormalizer2.cpp
     hash.h
     icudataver.c
-    icuplug.cpp
     icuplugimp.h
     listformatter.cpp
     loadednormalizer2impl.cpp
@@ -254,7 +259,6 @@ add_library(
     uvectr32.h
     uvectr64.cpp
     uvectr64.h
-    wintz.c
     wintz.h
 )
 
@@ -288,6 +292,15 @@ target_compile_definitions(icuuc PUBLIC U_USING_ICU_NAMESPACE=0)
 
 if(NOT BUILD_SHARED_LIBS)
   target_compile_definitions(icuuc PUBLIC U_STATIC_IMPLEMENTATION)
+endif()
+
+if(MSVC)
+  target_compile_definitions(icuuc PUBLIC U_PLATFORM_USES_ONLY_WIN32_API=1)
+  if(ICU_WINDOWS_STORE)
+    target_compile_definitions(icuuc PUBLIC U_PLATFORM_HAS_WINUWP_API=1)
+  else()
+    target_compile_definitions(icuuc PUBLIC U_PLATFORM_HAS_WINUWP_API=0)
+  endif()
 endif()
 
 target_include_directories(
