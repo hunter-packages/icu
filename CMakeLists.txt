@@ -11,7 +11,9 @@ HunterGate(
 
 project(ICU VERSION 55.1 LANGUAGES C CXX ASM)
 
-if(IOS OR ANDROID)
+string(COMPARE EQUAL "${CMAKE_SYSTEM_NAME}" "WindowsStore" ICU_WINDOWS_STORE)
+
+if(IOS OR ANDROID OR ICU_WINDOWS_STORE)
   set(default OFF)
 else()
   set(default ON)
@@ -28,8 +30,6 @@ option(ICU_BUILD_TOOLS "Build ICU tools" ${default})
 option(ICU_BUILD_IO "Build IO library" OFF)
 
 option(ICU_DATA_ARCHIVE_MODE "Output a single icudt*.dat file" OFF)
-
-string(COMPARE EQUAL "${CMAKE_SYSTEM_NAME}" "WindowsStore" ICU_WINDOWS_STORE)
 
 include(CheckIncludeFile)
 check_include_file(elf.h U_HAVE_ELF_H)
