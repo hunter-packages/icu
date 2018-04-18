@@ -269,9 +269,16 @@ target_compile_definitions(
     PUBLIC
     UNISTR_FROM_CHAR_EXPLICIT=explicit
     UNISTR_FROM_STRING_EXPLICIT=explicit
-    U_NO_DEFAULT_INCLUDE_UTF_HEADERS=1
     U_HAVE_ATOMIC=1
 )
+
+if(U_NO_DEFAULT_INCLUDE_UTF_HEADERS)
+  target_compile_definitions(
+      icuuc
+      PUBLIC
+      U_NO_DEFAULT_INCLUDE_UTF_HEADERS=1
+  )
+endif()
 
 target_link_libraries(icuuc PUBLIC ${CMAKE_DL_LIBS})
 

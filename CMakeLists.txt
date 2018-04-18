@@ -31,6 +31,8 @@ option(ICU_BUILD_IO "Build IO library" OFF)
 
 option(ICU_DATA_ARCHIVE_MODE "Output a single icudt*.dat file" OFF)
 
+option(U_NO_DEFAULT_INCLUDE_UTF_HEADERS "..." OFF)
+
 include(CheckIncludeFile)
 check_include_file(elf.h U_HAVE_ELF_H)
 
