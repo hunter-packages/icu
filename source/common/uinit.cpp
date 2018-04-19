@@ -34,8 +34,10 @@ static UBool U_CALLCONV uinit_cleanup() {
 static void U_CALLCONV
 initData(UErrorCode &status)
 {
+#if UCONFIG_ENABLE_PLUGINS
     /* initialize plugins */
     uplug_init(&status);
+#endif
 
 #if !UCONFIG_NO_CONVERSION
     /*
