@@ -2,6 +2,15 @@
 
 environment:
   matrix:
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      TOOLCHAIN: "vs-15-2017-win64-store-10-cxx17"
+      BUILD_SHARED_LIBS: ON
+      CONFIG: Release
+
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      TOOLCHAIN: "vs-15-2017-win64-store-10-cxx17"
+      BUILD_SHARED_LIBS: OFF
+      CONFIG: Debug
 
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
       TOOLCHAIN: "vs-15-2017-win64"
