@@ -984,12 +984,52 @@ static char* searchForTZFile(const char* path, DefaultTZInfo* tzInfo) {
     return result;
 }
 #endif
+
+#if U_PLATFORM_HAS_WINUWP_API == 1
+U_CAPI const char* U_EXPORT2
+uprv_getWindowsTimeZone()
+{
+  // Get default Windows timezone.
+  ComPtr<IInspectable> calendar;
+  HRESULT hr = RoActivateInstance(
+    HStringReference(RuntimeClass_Windows_Globalization_Calendar).Get(),
+    &calendar);
+  if (SUCCEEDED(hr))
+  {
+    ComPtr<ABI::Windows::Globalization::ITimeZoneOnCalendar> timezone;
+    hr = calendar.As(&timezone);
+    if (SUCCEEDED(hr))
+    {
+      HString timezoneString;
+      hr = timezone->GetTimeZone(timezoneString.GetAddressOf());
+      if (SUCCEEDED(hr))
+      {
+        int32_t length = static_cast<int32_t>(wcslen(timezoneString.GetRawBuffer(NULL)));
+        char* asciiId = (char*)uprv_calloc(length + 1, sizeof(char));
+        if (asciiId != nullptr)
+        {
+          u_UCharsToChars((UChar*)timezoneString.GetRawBuffer(NULL), asciiId, length);
+          return asciiId;
+        }
+      }
+    }
+  }
+
+  // Failed
+  return nullptr;
+}
+#endif
+
 U_CAPI const char* U_EXPORT2
 uprv_tzname(int n)
 {
     const char *tzid = NULL;
 #if U_PLATFORM_USES_ONLY_WIN32_API
+# if U_PLATFORM_HAS_WINUWP_API == 1
+    tzid = uprv_getWindowsTimeZone();
+# else
     tzid = uprv_detectWindowsTimeZone();
+# endif
 
     if (tzid != NULL) {
         return tzid;
