@@ -139,7 +139,7 @@ if(MSVC AND BUILD_SHARED_LIBS)
 endif()
 
 if(NOT BUILD_SHARED_LIBS)
-  target_compile_definitions(icudata PUBLIC U_STATIC_IMPLEMENTATION)
+  target_compile_definitions(icudata PUBLIC $<BUILD_INTERFACE:U_STATIC_IMPLEMENTATION>)
 endif()
 
 install(
