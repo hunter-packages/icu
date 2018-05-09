@@ -295,7 +295,11 @@ else()
   target_link_libraries(icuuc PUBLIC $<INSTALL_INTERFACE:icudata>)
 endif()
 
-target_compile_definitions(icuuc PUBLIC U_USING_ICU_NAMESPACE=0)
+if(U_USING_ICU_NAMESPACE)
+  target_compile_definitions(icuuc PUBLIC U_USING_ICU_NAMESPACE=1)
+else()
+  target_compile_definitions(icuuc PUBLIC U_USING_ICU_NAMESPACE=0)
+endif()
 
 if(NOT BUILD_SHARED_LIBS)
   target_compile_definitions(icuuc PUBLIC $<BUILD_INTERFACE:U_STATIC_IMPLEMENTATION>)
