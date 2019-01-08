@@ -127,11 +127,19 @@ add_custom_command(
 
 add_library(icudata ${asm_file})
 
+# Name expected by Boost
+if(MSVC)
+  set(output_name icudt)
+else()
+  set(output_name icudata)
+endif()
+
 set_target_properties(
     icudata
     PROPERTIES
     LINKER_LANGUAGE C
     EXPORT_NAME data
+    OUTPUT_NAME ${output_name}
 )
 
 if(MSVC AND BUILD_SHARED_LIBS)

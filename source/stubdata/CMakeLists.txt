@@ -27,9 +27,16 @@ if(ICU_DATA_ARCHIVE_MODE)
   )
 endif()
 
+# Name expected by Boost
+if(MSVC)
+  set(output_name icudt)
+else()
+  set(output_name icudata)
+endif()
+
 set_target_properties(
     icustubdata
     PROPERTIES
     EXPORT_NAME data
-    OUTPUT_NAME icudata
+    OUTPUT_NAME ${output_name}
 )

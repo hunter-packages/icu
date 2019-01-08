@@ -305,3 +305,8 @@ install(
 )
 
 set_target_properties(icui18n PROPERTIES EXPORT_NAME i18n)
+
+# Name expected by Boost
+if(MSVC)
+  set_target_properties(icui18n PROPERTIES OUTPUT_NAME icuin)
+endif()
