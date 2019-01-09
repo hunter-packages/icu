@@ -7,7 +7,11 @@ else()
 endif()
 
 if(NOT BUILD_SHARED_LIBS)
-  target_compile_definitions(icustubdata PUBLIC $<BUILD_INTERFACE:U_STATIC_IMPLEMENTATION>)
+  if(MSVC)
+    target_compile_definitions(icustubdata PUBLIC U_STATIC_IMPLEMENTATION)
+  else()
+    target_compile_definitions(icustubdata PUBLIC $<BUILD_INTERFACE:U_STATIC_IMPLEMENTATION>)
+  endif()
 endif()
 
 target_include_directories(

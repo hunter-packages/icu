@@ -302,7 +302,11 @@ else()
 endif()
 
 if(NOT BUILD_SHARED_LIBS)
-  target_compile_definitions(icuuc PUBLIC $<BUILD_INTERFACE:U_STATIC_IMPLEMENTATION>)
+  if(MSVC)
+    target_compile_definitions(icuuc PUBLIC U_STATIC_IMPLEMENTATION)
+  else()
+    target_compile_definitions(icuuc PUBLIC $<BUILD_INTERFACE:U_STATIC_IMPLEMENTATION>)
+  endif()
 endif()
 
 if(MSVC)

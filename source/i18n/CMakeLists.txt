@@ -279,7 +279,11 @@ target_compile_definitions(icui18n PRIVATE U_I18N_IMPLEMENTATION)
 target_link_libraries(icui18n PUBLIC icuuc)
 
 if(NOT BUILD_SHARED_LIBS)
-  target_compile_definitions(icui18n PUBLIC $<BUILD_INTERFACE:U_STATIC_IMPLEMENTATION>)
+  if(MSVC)
+    target_compile_definitions(icui18n PUBLIC U_STATIC_IMPLEMENTATION)
+  else()
+    target_compile_definitions(icui18n PUBLIC $<BUILD_INTERFACE:U_STATIC_IMPLEMENTATION>)
+  endif()
 endif()
 
 target_include_directories(
