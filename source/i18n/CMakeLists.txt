@@ -1,0 +1,354 @@
+add_library(
+    icui18n
+    ${sources}
+    alphaindex.cpp
+    anytrans.cpp
+    anytrans.h
+    astro.cpp
+    astro.h
+    basictz.cpp
+    bocsu.cpp
+    bocsu.h
+    brktrans.cpp
+    brktrans.h
+    buddhcal.cpp
+    buddhcal.h
+    calendar.cpp
+    casetrn.cpp
+    casetrn.h
+    cecal.cpp
+    cecal.h
+    chnsecal.cpp
+    chnsecal.h
+    choicfmt.cpp
+    coleitr.cpp
+    coll.cpp
+    collation.cpp
+    collationbuilder.cpp
+    collationcompare.cpp
+    collationdata.cpp
+    collationdatabuilder.cpp
+    collationdatareader.cpp
+    collationdatawriter.cpp
+    collationfastlatin.cpp
+    collationfastlatinbuilder.cpp
+    collationfcd.cpp
+    collationiterator.cpp
+    collationkeys.cpp
+    collationroot.cpp
+    collationrootelements.cpp
+    collationruleparser.cpp
+    collationsets.cpp
+    collationsettings.cpp
+    collationtailoring.cpp
+    collationweights.cpp
+    compactdecimalformat.cpp
+    coptccal.cpp
+    coptccal.h
+    cpdtrans.cpp
+    cpdtrans.h
+    csdetect.cpp
+    csdetect.h
+    csmatch.cpp
+    csmatch.h
+    csr2022.cpp
+    csr2022.h
+    csrecog.cpp
+    csrecog.h
+    csrmbcs.cpp
+    csrmbcs.h
+    csrsbcs.cpp
+    csrsbcs.h
+    csrucode.cpp
+    csrucode.h
+    csrutf8.cpp
+    csrutf8.h
+    curramt.cpp
+    currfmt.cpp
+    currfmt.h
+    currpinf.cpp
+    currunit.cpp
+    dangical.cpp
+    datefmt.cpp
+    dayperiodrules.cpp
+    dcfmtsym.cpp
+    decContext.cpp
+    decContext.h
+    decNumber.cpp
+    decNumber.h
+    decNumberLocal.h
+    decimfmt.cpp
+    double-conversion-bignum-dtoa.cpp
+    double-conversion-bignum.cpp
+    double-conversion-cached-powers.cpp
+    double-conversion-diy-fp.cpp
+    double-conversion-fast-dtoa.cpp
+    double-conversion-strtod.cpp
+    double-conversion.cpp
+    dtfmtsym.cpp
+    dtitv_impl.h
+    dtitvfmt.cpp
+    dtitvinf.cpp
+    dtptngen.cpp
+    dtptngen_impl.h
+    dtrule.cpp
+    erarules.cpp
+    esctrn.cpp
+    esctrn.h
+    ethpccal.cpp
+    ethpccal.h
+    fmtable.cpp
+    fmtable_cnv.cpp
+    format.cpp
+    fphdlimp.cpp
+    fphdlimp.h
+    fpositer.cpp
+    funcrepl.cpp
+    funcrepl.h
+    gender.cpp
+    gregocal.cpp
+    gregoimp.cpp
+    gregoimp.h
+    hebrwcal.cpp
+    hebrwcal.h
+    indiancal.cpp
+    indiancal.h
+    inputext.cpp
+    inputext.h
+    islamcal.cpp
+    islamcal.h
+    japancal.cpp
+    japancal.h
+    listformatter.cpp
+    measfmt.cpp
+    measunit.cpp
+    measure.cpp
+    msgfmt.cpp
+    msgfmt_impl.h
+    name2uni.cpp
+    name2uni.h
+    nfrlist.h
+    nfrs.cpp
+    nfrs.h
+    nfrule.cpp
+    nfrule.h
+    nfsubs.cpp
+    nfsubs.h
+    nortrans.cpp
+    nortrans.h
+    nounit.cpp
+    nultrans.cpp
+    nultrans.h
+    number_affixutils.cpp
+    number_asformat.cpp
+    number_capi.cpp
+    number_compact.cpp
+    number_currencysymbols.cpp
+    number_decimalquantity.cpp
+    number_decimfmtprops.cpp
+    number_fluent.cpp
+    number_formatimpl.cpp
+    number_grouping.cpp
+    number_integerwidth.cpp
+    number_longnames.cpp
+    number_mapper.cpp
+    number_modifiers.cpp
+    number_multiplier.cpp
+    number_notation.cpp
+    number_padding.cpp
+    number_patternmodifier.cpp
+    number_patternstring.cpp
+    number_rounding.cpp
+    number_scientific.cpp
+    number_skeletons.cpp
+    number_stringbuilder.cpp
+    number_utils.cpp
+    numfmt.cpp
+    numparse_affixes.cpp
+    numparse_compositions.cpp
+    numparse_currency.cpp
+    numparse_decimal.cpp
+    numparse_impl.cpp
+    numparse_parsednumber.cpp
+    numparse_scientific.cpp
+    numparse_stringsegment.cpp
+    numparse_symbols.cpp
+    numparse_validators.cpp
+    numrange_fluent.cpp
+    numrange_impl.cpp
+    numsys.cpp
+    olsontz.cpp
+    olsontz.h
+    persncal.cpp
+    persncal.h
+    plurfmt.cpp
+    plurrule.cpp
+    plurrule_impl.h
+    quant.cpp
+    quant.h
+    quantityformatter.cpp
+    rbnf.cpp
+    rbt.cpp
+    rbt.h
+    rbt_data.cpp
+    rbt_data.h
+    rbt_pars.cpp
+    rbt_pars.h
+    rbt_rule.cpp
+    rbt_rule.h
+    rbt_set.cpp
+    rbt_set.h
+    rbtz.cpp
+    regexcmp.cpp
+    regexcmp.h
+    regexcst.h
+    regeximp.cpp
+    regeximp.h
+    regexst.cpp
+    regexst.h
+    regextxt.cpp
+    regextxt.h
+    region.cpp
+    reldatefmt.cpp
+    reldtfmt.cpp
+    reldtfmt.h
+    rematch.cpp
+    remtrans.cpp
+    remtrans.h
+    repattrn.cpp
+    rulebasedcollator.cpp
+    scientificnumberformatter.cpp
+    scriptset.cpp
+    search.cpp
+    selfmt.cpp
+    selfmtimpl.h
+    sharedbreakiterator.cpp
+    simpletz.cpp
+    smpdtfmt.cpp
+    smpdtfst.cpp
+    sortkey.cpp
+    standardplural.cpp
+    strmatch.cpp
+    strmatch.h
+    strrepl.cpp
+    strrepl.h
+    stsearch.cpp
+    taiwncal.cpp
+    taiwncal.h
+    timezone.cpp
+    titletrn.cpp
+    titletrn.h
+    tmunit.cpp
+    tmutamt.cpp
+    tmutfmt.cpp
+    tolowtrn.cpp
+    tolowtrn.h
+    toupptrn.cpp
+    toupptrn.h
+    translit.cpp
+    transreg.cpp
+    transreg.h
+    tridpars.cpp
+    tridpars.h
+    tzfmt.cpp
+    tzgnames.cpp
+    tznames.cpp
+    tznames_impl.cpp
+    tzrule.cpp
+    tztrans.cpp
+    ucal.cpp
+    ucln_in.cpp
+    ucln_in.h
+    ucol.cpp
+    ucol_imp.h
+    ucol_res.cpp
+    ucol_sit.cpp
+    ucoleitr.cpp
+    ucsdet.cpp
+    udat.cpp
+    udateintervalformat.cpp
+    udatpg.cpp
+    ufieldpositer.cpp
+    uitercollationiterator.cpp
+    ulistformatter.cpp
+    ulocdata.cpp
+    umsg.cpp
+    umsg_imp.h
+    unesctrn.cpp
+    unesctrn.h
+    uni2name.cpp
+    uni2name.h
+    unum.cpp
+    unumsys.cpp
+    upluralrules.cpp
+    uregex.cpp
+    uregexc.cpp
+    uregion.cpp
+    usearch.cpp
+    uspoof.cpp
+    uspoof_build.cpp
+    uspoof_conf.cpp
+    uspoof_conf.h
+    uspoof_impl.cpp
+    uspoof_impl.h
+    usrchimp.h
+    utf16collationiterator.cpp
+    utf8collationiterator.cpp
+    utmscale.cpp
+    utrans.cpp
+    vtzone.cpp
+    vzone.cpp
+    vzone.h
+    windtfmt.cpp
+    windtfmt.h
+    winnmfmt.cpp
+    winnmfmt.h
+    wintzimpl.cpp
+    wintzimpl.h
+    zonemeta.cpp
+    zonemeta.h
+    zrule.cpp
+    zrule.h
+    ztrans.cpp
+    ztrans.h
+)
+
+target_compile_definitions(icui18n PRIVATE U_I18N_IMPLEMENTATION)
+target_link_libraries(icui18n PUBLIC icuuc)
+
+if(NOT BUILD_SHARED_LIBS)
+  if(MSVC)
+    target_compile_definitions(icui18n PUBLIC U_STATIC_IMPLEMENTATION)
+  else()
+    target_compile_definitions(icui18n PUBLIC $<BUILD_INTERFACE:U_STATIC_IMPLEMENTATION>)
+  endif()
+endif()
+
+target_include_directories(
+    icui18n
+    PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}>
+)
+
+install(
+    DIRECTORY unicode
+    DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+    FILES_MATCHING
+    PATTERN "*.h"
+)
+
+install(
+    TARGETS icui18n
+    EXPORT "${TARGETS_EXPORT_NAME}"
+    LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+    ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+    RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
+    INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+)
+
+set_target_properties(icui18n PROPERTIES EXPORT_NAME i18n)
+
+# Name expected by Boost
+if(MSVC)
+  set_target_properties(icui18n PROPERTIES OUTPUT_NAME icuin)
+endif()

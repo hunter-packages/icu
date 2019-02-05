@@ -1,0 +1,12 @@
+add_executable(gendict gendict.cpp)
+
+target_link_libraries(gendict PUBLIC icutu icui18n icuuc)
+
+install(
+    TARGETS gendict
+    EXPORT "${TARGETS_EXPORT_NAME}"
+    LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+    ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+    RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
+    INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+)
