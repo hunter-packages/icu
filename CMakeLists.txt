@@ -23,6 +23,7 @@ if(MSVC)
   add_definitions(-D_CRT_SECURE_NO_WARNINGS)
   add_definitions(-D_CRT_SECURE_NO_DEPRECATE)
   add_definitions(-DU_ATTRIBUTE_DEPRECATED=)
+  add_definitions(/utf-8)
 endif()
 
 option(ICU_BUILD_TOOLS "Build ICU tools" ${default})
