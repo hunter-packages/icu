@@ -37,17 +37,6 @@ environment:
       BUILD_SHARED_LIBS: OFF
       CONFIG: Release
 
-    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
-      TOOLCHAIN: "vs-12-2013-win64"
-      BUILD_SHARED_LIBS: ON
-      CONFIG: Release
-
-    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
-      TOOLCHAIN: "vs-12-2013-win64"
-      BUILD_SHARED_LIBS: OFF
-      CONFIG: Release
-
-
 install:
   # Python 3
   - cmd: set PATH=C:\Python34-x64;C:\Python34-x64\Scripts;%PATH%
