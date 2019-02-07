@@ -1,11 +1,5 @@
-set(sources)
-if(NOT ICU_WINDOWS_STORE)
-  list(APPEND sources icuplug.cpp wintz.cpp)
-endif()
-
 add_library(
     icuuc
-    ${sources}
     appendable.cpp
     bmpset.cpp
     bmpset.h
@@ -40,6 +34,7 @@ add_library(
     filterednormalizer2.cpp
     hash.h
     icudataver.cpp
+    icuplug.cpp
     icuplugimp.h
     loadednormalizer2impl.cpp
     localsvc.h
@@ -272,6 +267,7 @@ add_library(
     uvectr32.h
     uvectr64.cpp
     uvectr64.h
+    wintz.cpp
     wintz.h
 )
 
