@@ -31,7 +31,6 @@ endif()
 option(ICU_BUILD_TOOLS "Build ICU tools" ${default})
 
 option(ICU_BUILD_IO "Build IO library" OFF)
-option(ICU_BUILD_LAYOUTEX "Build layoutex library" OFF)
 
 option(ICU_DATA_ARCHIVE_MODE "Output a single icudt*.dat file" OFF)
 
@@ -117,9 +116,11 @@ endif()
 ### }
 
 add_subdirectory(source/common) # icuuc
-if(ICU_BUILD_LAYOUTEX)
-  add_subdirectory(source/layoutex) # iculx
-endif()
+
+# Not used, see:
+# - https://docs.hunter.sh/en/latest/packages/pkg/icu-lx.html
+# add_subdirectory(source/layoutex) # iculx
+
 add_subdirectory(source/i18n) # icui18n
 
 if(ICU_BUILD_IO)
