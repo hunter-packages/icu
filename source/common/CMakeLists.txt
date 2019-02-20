@@ -341,6 +341,11 @@ install(
 )
 
 install(
+    FILES cmemory.h
+    DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+)
+
+install(
     TARGETS icuuc
     EXPORT "${TARGETS_EXPORT_NAME}"
     LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
