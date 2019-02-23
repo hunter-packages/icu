@@ -125,6 +125,15 @@ add_custom_command(
     COMMENT "Generating ${asm_file} assembler file"
 )
 
+if(RASPBERRY_PI)
+  # Raspberry Pi 'bin/arm-linux-gnueabihf-as' tool doesn't
+  # understand '-O3', '-DNDEBUG', etc.
+  set(CMAKE_ASM_FLAGS_RELEASE "")
+  set(CMAKE_ASM_FLAGS_DEBUG "")
+  set(CMAKE_ASM_FLAGS_MINSIZEREL "")
+  set(CMAKE_ASM_FLAGS_RELWITHDEBINFO "")
+endif()
+
 add_library(icudata ${asm_file})
 
 # Name expected by Boost
@@ -146,11 +155,15 @@ if(MSVC AND BUILD_SHARED_LIBS)
   set_property(TARGET icudata APPEND PROPERTY LINK_FLAGS /NOENTRY)
 endif()
 
-if(NOT BUILD_SHARED_LIBS)
-  if(MSVC)
-    target_compile_definitions(icudata PUBLIC U_STATIC_IMPLEMENTATION)
-  else()
-    target_compile_definitions(icudata PUBLIC $<BUILD_INTERFACE:U_STATIC_IMPLEMENTATION>)
+if(NOT RASPBERRY_PI)
+  # Raspberry Pi 'bin/arm-linux-gnueabihf-as' tool doesn't
+  # understand '-DU_STATIC_IMPLEMENTATION'
+  if(NOT BUILD_SHARED_LIBS)
+    if(MSVC)
+      target_compile_definitions(icudata PUBLIC U_STATIC_IMPLEMENTATION)
+    else()
+      target_compile_definitions(icudata PUBLIC $<BUILD_INTERFACE:U_STATIC_IMPLEMENTATION>)
+    endif()
   endif()
 endif()
 
