@@ -1,16 +1,16 @@
 add_library(
     icuio
     locbund.cpp
-    sprintf.c
-    sscanf.c
+    sprintf.cpp
+    sscanf.cpp
     ucln_io.cpp
-    ufile.c
-    ufmt_cmn.c
+    ufile.cpp
+    ufmt_cmn.cpp
     uprintf.cpp
-    uprntf_p.c
-    uscanf.c
-    uscanf_p.c
-    ustdio.c
+    uprntf_p.cpp
+    uscanf.cpp
+    uscanf_p.cpp
+    ustdio.cpp
     ustream.cpp
 )
 
