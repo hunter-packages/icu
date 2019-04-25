@@ -25,7 +25,7 @@ install(
 )
 
 if(ICU_BUILD_IO)
-  add_executable(derb derb.c)
+  add_executable(derb derb.cpp)
 
   target_link_libraries(derb PUBLIC icuio icutu icui18n icuuc)
 
